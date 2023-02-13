@@ -3,10 +3,15 @@ use std::path::PathBuf;
 
 use anyhow::Result;
 use clap::Parser;
+use owo_colors::OwoColorize;
+
+const SHELL: &str = "zsh";
 
 #[derive(Parser, Debug)]
 struct Args {
     template: Option<String>,
+    #[clap(short, long, default_value = SHELL)]
+    run: String,
 }
 
 fn get_template_path() -> Result<PathBuf> {
@@ -23,21 +28,39 @@ fn main() -> Result<()> {
         let path = get_template_path()?;
         let mut template = path.join(template);
 
-        let shell = std::env::var("SHELL")?;
+        // let shell = std::env::var("SHELL")?;
+        let run_flag = args.run;
 
         template.set_extension("nix");
 
-        std::process::Command::new("nix-shell")
+        println!(
+            "[{}] Executing {} {}",
+            "shell".cyan(),
+            "nix-shell".blue(),
+            template.display().green()
+        );
+
+        let status = std::process::Command::new("nix-shell")
             .arg("--run")
-            .arg(shell)
+            .arg(run_flag)
             .arg(template)
-            .output()?;
+            .status()?;
+
+        println!(
+            "[{}] {} exited with {}",
+            "shell".cyan(),
+            "nix-shell".blue(),
+            if status.success() {
+                status.green().to_string()
+            } else {
+                status.red().to_string()
+            }
+        )
     } else {
-        // args.print_long_help();
         let path = get_template_path()?;
         let templates = get_templates(&path)?;
 
-        println!("Available templates:");
+        println!("[{}] Available templates:", "shell".cyan());
 
         for template in templates {
             println!(
@@ -47,6 +70,7 @@ fn main() -> Result<()> {
                     .expect("Could not get file stem")
                     .to_str()
                     .unwrap()
+                    .blue()
             );
         }
     }

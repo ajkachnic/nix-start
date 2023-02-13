@@ -9,3 +9,4 @@ edition = "2021"
 anyhow = "1.0.69"
 clap = { version = "4.1.4", features = ["derive"] }
 home = "0.5.4"
+owo-colors = "3.5.0"
