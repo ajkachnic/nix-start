@@ -135,10 +135,11 @@ checksum = "f051f77a7c8e6957c0696eac88f26b0117e54f52d3fc682ab19397a8812846a4"
 
 [[package]]
 name = "nix-start"
-version = "0.0.1"
+version = "0.0.3"
 dependencies = [
  "anyhow",
  "clap",
+ "clap_lex",
  "home",
  "owo-colors",
 ]
