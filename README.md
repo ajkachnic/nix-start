@@ -1,6 +1,6 @@
 # nix-start
 
-A simple utility for starting nix-shell's based on templates.
+A simple utility for starting nix-shell based on templates.
 
 ## Example
 
